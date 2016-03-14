@@ -6,9 +6,7 @@ import extraction
 from watson_developer_cloud import ConceptInsightsV2
 
 '''
-Created by Chris Purdy and Upol Ehsan, 3/4/2016
-Programmed by Chris Purdy.
-Updated by Smruthi
+By Smruthi
 '''
 
 #helper functions
