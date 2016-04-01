@@ -1,6 +1,7 @@
 import requests
 import json
 import sys
+import time
 import extraction
 
 from watson_developer_cloud import ConceptInsightsV2
@@ -52,13 +53,13 @@ def addTopic(query,add_concept):
             try:
                 concept_chosen = raw_input("Enter your topic of interest:")
                 payload = {"query": concept_chosen}
-                r = requests.get(id,(username,password),payload)
+                r = getRequest(id,(username,password),payload)
                 checkIfNoConcept = r.json().get('matches')[0]
                 truth = False
             except IndexError:
                 truth = True
                 print "Sorry! Topic doesn't exist! Try again!"
-        print "query at the func:", query
+        #print "query at the func:", query
         #return query.append(concept_chosen)
 
 def replace(query):
@@ -117,6 +118,7 @@ while choice != 2:
         while(truth):
             try:
                 concept_chosen = raw_input("Enter your topic of interest:")
+                start = time.clock()
                 payload = {"query": concept_chosen}
                 r = getRequest(id,(username,password),payload)
                 checkIfNoConcept = r.json().get('matches')[0]
@@ -139,7 +141,7 @@ while choice != 2:
 
             #appends concept ids of topics
             concept_id = []
-            print "query",query
+            #print "query",query
             for x in query:
                 payload = {"query": x}
                 r = getRequest(id,(username,password),payload)
@@ -147,16 +149,19 @@ while choice != 2:
                 # This is an identifier we can use to find other related concepts!
                 concept_id.append(r.json().get('matches')[0].get('id'))
 
+            #print "concept id",concept_id
+
             #finds related concepts
             related_concepts = concept_insights.get_related_concepts(concept_ids=concept_id, level=0, limit=3)
 
 
             # With this request, we are finding all of the concepts related to the Concept ID we found before.
             # We are limiting the number of results to 3, and are using the most common results ("level = 0").
-            payload = {"concepts": concept_id, "limit": "3", "level": "0"}
+           # payload = {"concepts": concept_id, "limit": "3", "level": "0"}
 
             array_concepts=[]
             map = related_concepts.get("concepts")
+            #print "map",map
             array = []
             for x in map:
                 array.append(x.get("concept").get("id"))
@@ -170,14 +175,17 @@ while choice != 2:
 
             string = string[:-2]
             string += "]"
-
+            #print "string",string
             #addind one more layer of depth - related topics of related topics
             payload = {"concepts": string, "limit": "3", "level": "0"}
-            print "payload",payload
+            #print "payload",payload
+
+           # ri =  concept_insights.get_related_concepts()
 
             r = getRequest(related_concepts_id, (username,password), payload)
-            print "r ",r
+            print "r ",r.json()
             map = r.json().get("concepts")
+            #print "time taken", time.clock()-start
             print "Related topics are:"
             for x in map:
                 source = x.get("concept").get("label")
