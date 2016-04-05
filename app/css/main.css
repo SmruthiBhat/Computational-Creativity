@@ -1,0 +1,25 @@
+.container {
+  width: 940px;
+  margin: 0 auto;
+}
+
+#search input {
+  font-size: 18px;
+  padding: 5px;
+  width: 300px;
+}
+
+#search button {
+  background-color: blue;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 10px 8px 10px;
+}
+
+p.node {
+  cursor: pointer;
+  background-color: #eee;
+  padding: 8px;
+  display: inline-block;
+}

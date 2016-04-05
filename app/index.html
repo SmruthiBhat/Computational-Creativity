@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <style>
+  
+.headerDivider {
+     border-left:1px solid #38546d; 
+     border-right:1px solid #16222c; 
+     height:100%;
+     position:absolute;
+     left:35%;
+     top:10px; 
+}
+  </style>
+  <body>
+    <div class="main">
+      <div class="container"style="float:left; width:35%">
+        
+        <!-- Case 1 -->
+		  <h1><b>iSee therefore iThink<b></h1>
+		  <div id="concepts-panel" class="tab-panels--tab-pane active" role="tab-panel">
+		  <h2><b>Enter a topic of your interest</b></h2>
+		<input id="btnAdd" type="button" value="Add" />
+<br />
+<br />
+<div id="TextBoxContainer">
+    <!--Textboxes will be added here -->
+</div>
+<br />
+<input id="btnGet" type="button" value="Get Values" />
+	</div>
+	
+		<div id = "leftResult"></div>
+	  </div>
+	  <div class = "headerDivider"></div>
+	  <div class="container"style="float:right; width:60%;right:100%">
+        <!-- Output -->
+        <div id="results"></div>
+		<div>
+		
+
+
+</div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js">
+            </script>
+    <script src="js/main.js"></script>  
+		
+  </body>
+</html>
