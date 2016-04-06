@@ -31,7 +31,7 @@ $(function () {
       // 3. format the output
 	  query = query.slice(0,-1)
       var p = '<p class="node">'+query+'</p>'+'<p>Topic: ' + query + '</p>';
-	  var h = '<h2>Related Topics</h2>'+'<textarea rows="4" cols="40">'+ res +'</textarea>';
+	  var h = '<h2>Related Topics</h2>'+'<textarea readonly rows="4" cols="40">'+ res +'</textarea>';
       // 4. display the output
 	  $("#results").html(p);
 	  $('#leftResult').html(h);
@@ -41,9 +41,17 @@ $(function () {
     });
     $("body").on("click", ".remove", function () {
         $(this).closest("div").remove();
+	
     });
+	 $("body").on("click", ".replace", function () {
+        $("#textBox").val("");
+	
+    });
+	//USAGE
+
 });
 function GetDynamicTextBox(value) {
-    return '<input name = "DynamicTextBox" type="text" value = "' + value + '" />&nbsp;' +
-            '<input type="button" value="Remove" class="remove" />'
+    return '<input id ="textBox" name = "DynamicTextBox" type="text" value = "' + value + '" />&nbsp;' +
+            '<input type="button" value="Remove" class="remove" />' + '&nbsp;' +
+            '<input type="button" value="Replace" class="replace" />'
 }
