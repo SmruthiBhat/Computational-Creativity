@@ -6,6 +6,7 @@ import time
 import extraction
 import HTMLParser
 import cgi
+import copy
 
 from flask import Flask, jsonify
 #from BeautifulSoup import BeautifulSoup
@@ -107,14 +108,19 @@ def endJourney():
 
 def compare(list1,list2):
     print "list1 before",list1
-    print "list2 before",list2
+   # print "list2 before",list2
+    list_temp =[]
+    list_temp=copy.deepcopy(list2)
+    print "list_temp before",list_temp
     ln = []
     for i in list2:
-        if i.get("concept").get("label") in list1:
-            list2.remove(i)
-    print "list2 after",list2
+        print "checkpoint", i.get("concept").get("label").encode('UTF-8').lower()
+        if i.get("concept").get("label").lower() in list1:
+            list_temp.remove(i)
+
+    print "list_temp after",list_temp
     for i in range(3):
-        ln.append(list2[i])
+        ln.append(list_temp[i])
     print "ln",ln
     return ln
 
@@ -164,7 +170,7 @@ def search(query):
         concept_id.append(r.json().get('matches')[0].get('id'))
         #print "concept id",concept_id
         # finds related concepts
-    related_concepts = concept_insights.get_related_concepts(concept_ids=concept_id, level=0, limit=5)
+    related_concepts = concept_insights.get_related_concepts(concept_ids=concept_id, level=0, limit=7)
     print "related_concepts",related_concepts
     # With this request, we are finding all of the concepts related to the Concept ID we found before.
     # We are limiting the number of results to 3, and are using the most common results ("level = 0").
@@ -172,8 +178,10 @@ def search(query):
 
     array_concepts=[]
     map = related_concepts.get("concepts")
-    final_results = []
-    final_results =  compare(topic,map)
+    topic_temp = []
+    for x in topic:
+        topic_temp.append(x.lower())
+    final_results =  compare(topic_temp,map)
     print "map1",map
     array = []
     #for x in map:
