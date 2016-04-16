@@ -2,6 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/style.css">
   </head>
   <style>
   
@@ -31,20 +32,65 @@ visibility: hidden;
   </style>
   <body>
     <div class="main">
-      <div class="container"style="float:left; width:35%">
-        
+      <div class="container"style="float:left; width:25%">
+ <br />       
         <!-- Case 1 -->
-		  <h1><b>iSee therefore iThink<b></h1>
+		 <h2 class="base--h2">iSee therefore iThink</h2>
 		  <div id="concepts-panel" class="tab-panels--tab-pane active" role="tab-panel">
-		  <h2><b>Enter a topic of your interest</b></h2>
+		 
 		
+
 <br />
-<br />
+<div class="tab-panels" role="tabpanel">
+				<h1><b>Enter a topic of your interest<b></h1>
+				  <div class="tab-panels--tab-content">
+					<div id="concepts-panel" class="tab-panels--tab-pane active" role="tab-panel">
+					  <div class="concept--input-concept-list">
+						<div class="concept">
+						  <div class="concept--new-concept-container active">
+							<span>+</span>
+							<span>add topic</span>
+						  </div>
+						  <div class="concept--input-container">
+							 <span class="twitter-typeahead" style="position: relative; display: inline-block;"><input class="concept--input tt-input" type="text" id="tb1" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: 'Helvetica Neue', Helvetica, 'Open Sans', Arial, 'Lucida Grande', Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><div class="tt-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div class="tt-dataset tt-dataset-0"></div></div></span>
+						  </div>
+						</div>
+					  </div>
+					  <span class="icon-hyperlink">
+					</div>
+					<div id="text-panel" class="tab-panels--tab-pane" role="tab-panel">
+					  <div class="concept--abstract-concept-container">
+						<div class="concept--abstract-concept-title">
+						  Top 3 Abstracted Concepts:
+						</div>
+						<div class="concept--abstract-concept-list">
+						</div>
+						<span class="icon-hyperlink">
+							<span class="icon icon-code icon-code-disabled"></span>
+							<button id="text-annotator-view-code-btn" class="base--a tab-panels--view-code" href="" onclick="show_text_annotator_response()" type="reset" disabled="">
+						  		View JSON
+							</button>
+						</span>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				<div id="concepts-panel-API" class="input--API input--json-container">
+			    <pre class="base--pre API--json language-javascript">
+					<code id="concepts-panel-API-data" class="base--code language-javascript">
+					</code>
+				</pre>
+			</div>
+			<div id="text-panel-API" class="input--API input--json-container">
+			    <pre class="base--pre API--json language-javascript">
+					<code id="text-panel-API-data" class="base--code language-javascript">
+					</code>
+				</pre>
+			</div>
 <div id="TextBoxContainer">
     <!--Textboxes will be added here -->
 </div>
-<br />
-<input id="btnAdd" type="button" value="Add" />
+<br /> 
 <input id="btnGet" type="button" value="Get Related Topics" />
 	</div>
 	
@@ -136,11 +182,12 @@ visibility: hidden;
       </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-	 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js">
-            </script>
-    <script src="js/main.js"></script>  
-		
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://twitter.github.io/typeahead.js/releases/0.11.1/typeahead.bundle.js"></script>
+	<script type="text/javascript" src="js/vendor/_prism.js"></script>
+			<script src="https://twitter.github.io/typeahead.js/releases/0.11.1/typeahead.bundle.js"></script>
+    <!--<script src="js/main.js"></script>  -->
+	<script type="text/javascript" src="js/citypeahead.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>	
   </body>
 </html>

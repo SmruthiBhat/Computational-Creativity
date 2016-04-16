@@ -1,68 +1,3 @@
-
-var main = function() {
-  
-  // case 1 - when someone submits a form
-  $("#search").submit(function(event) {
-    
-    // 1. get the search query
-    query = $('#query').val();
-
-    // 2. prepare the api url
-    url = 'http://localhost:5000/search/' + query;
-    
-    // 3. make a request
-    $.get(url, function(data) {
-      // once the response returns, get the two keys
-      var query = data['results']['query'];
-      var hello = data['results']['hello'];
-	  var res = "";
-	  console.log(data['results'].length);
-	  for (i = 0; i < data['results'].length; i++) {
-		res += data ['results'][i]['concept']['label'];
-		res += "\n"
-	  }
-      // 3. format the output
-      var p = '<p class="node">'+query+'</p>'+'<p>Query: ' + query + '</p>';
-	  var h = '<h2>Related Topics</h2>'+'<textarea rows="4" cols="40">'+ res +'</textarea>';
-      // 4. display the output
-	  $("#results").html(p);
-	  $('#leftResult').html(h);
-     
-    });
-
-    // prevent the form from submitting to the server
-    event.preventDefault();
-  });
-
- 
-
-
-  // case 2 - when someone clicks an item on the page
-  $('p.node').click(function(event) {
-
-    // 1. get the search query
-    var nodeText = $(this).text();
-
-    // 2. prepare the api url
-    url = 'http://localhost:5000/search/' + nodeText;
-
-    // 3. make a request
-    $.get(url, function(data) {
-      // once the response returns, get the two keys
-      var query = data['results']['query'];
-      var hello = data['results']['hello'];
-
-      // 3. format the output
-      var p = '<p>Query: ' + query + '</p><p>Hello : ' + hello + '</p>';
-
-      // 4. display the output
-      $("#results").html(p);
-    });
-
-  })
-}
-
-
 /**
  * Copyright 2015 IBM Corp. All Rights Reserved.
  *
@@ -172,7 +107,7 @@ $(document).ready(function() {
 
   function sourceLabelSearch(query, callback) {
     query_data = query;
-    return $.get('/api/labelSearch', {
+    return $.get('http://localhost:5000/search/', {
       query: query,
       limit: 7,
       concept_fields: JSON.stringify({
@@ -525,6 +460,3 @@ function generate_TED_panel(TED_data, your_input_concepts) {
   });
 
 }
-
-
-$(document).ready(main);
