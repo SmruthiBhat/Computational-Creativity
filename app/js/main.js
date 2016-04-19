@@ -7,34 +7,57 @@ $(function () {
     $("#btnGet").bind("click", function () {
         var values = "";
 		var val = "";
-        $("input[name=DynamicTextBox]").each(function () {
-            values += $(this).val() + "\n";
-			val += this.value + '+';
-        });
+		var x =0;
+		
+        $('.concept').each(function( ) {
+		if(!$(this).is(':last-child')){
+	console.log( $( this ).text() );
+	val += $( this ).text()+"+";
+	}
+	url = 'http://localhost:5000/search/' + val
+});
+      
+
         //alert(values);
 		  // 1. get the search query
-    query = val;
+    query = val.slice(0, -1);;
     // 2. prepare the api url
-    url = 'http://localhost:5000/search/' + val;
+    //url = 'http://localhost:5000/search/' + val;
     
     // 3. make a request
     $.get(url, function(data) {
       // once the response returns, get the two keys
       //var query = data['results']['query'];
+	  function myTrim(x) {
+    return x.replace(/[+]+/g, '+');
+}
       var hello = data['results']['hello'];
 	  var res = "";
+	  var pre = '<div class="tab-panels" role="tabpanel">'
+				+'<h3 class="base--h3"><b>Related Topics<b></h3>'+'<div class="how-it-works--graph">'
+	+'<div class="concept--your-input-list">'
+	+'<div class="concept--your-input-list-item">'
+	+'<div class="concept--your-input">'
+	+'<span class="concept--typed-concept">'+myTrim(query)+'</span></div></div></div>'+'<div class="concept--derived-concept-list">';
 	  console.log(data['results'].length);
 	  for (i = 0; i < data['results'].length; i++) {
+		pre += '<div class="concept--derived-concept-list-item">'+'<div class="concept--derived-concept active" data-index="'+i+'">'
+				+'<span class="concept--derived-typed-concept">'+data ['results'][i]['concept']['label']
+		+'</span>&nbsp<i class="icono-plus"></i></div></div>';
 		res += data ['results'][i]['concept']['label'];
 		res += "\n"
 	  }
       // 3. format the output
-	  query = query.slice(0,-1)
+	  query = query.slice(0,-1);
       var p = '<p class="node">'+query+'</p>'+'<p>Topic: ' + query + '</p>';
 	  var h = '<h2>Related Topics</h2>'+'<textarea readonly rows="4" cols="40">'+ res +'</textarea>';
+	  
+	  //$(pre).insertAfter('.concept--input-concept-list');
+	  
       // 4. display the output
 	  //$("#results").html(p);
-	  $('#leftResult').html(h);
+	  pre += '</div></div></div>';
+	  $('#leftResult').html(pre);
 		
 		    // 4. make layer visible and include topic names
       //var svg = $('#SVG1');
@@ -75,246 +98,115 @@ $(function () {
     });
 	//USAGE
 	
-	  $('.concept--input-concept-list').keypress(function (e) {
+	  $("body").on("keypress",".concept--input-container",function (e) {
       var code = e.which;
       if (code == 13){
          
 	
 		//$('.concept--input').first().addClass(x);
-		var self = $(this);
-		var x = $('#tb1').val();
+		//var self = $('.concept--input-container');
+		var x= $(this).find('.concept--input').addClass('tt-input').val();
+		//var idText = "#" +id;
+		//var x = $('#tb1').val();
 		console.log(x);
-			var y = '<div class="concept">'+'<div class="concept--typed-concept-container active">'+'<span class="concept--typed-concept label" >'+x+'</span>'
-					+'<i class="concept--close-icon icon icon-close"></i>'
-				+'</div>'+
-			+'</div>'
-		$(y).insertBefore(this);
-  //$(this).hide();
+			var y = '<div class="concept">'+'<div class="concept--typed-concept-container active">'+'<i class="fa fa-refresh"></i>&nbsp'+'<span class="concept--typed-concept label" >'+x+'</span>'
+					+'<i class="concept--close-icon icon icon-close">'+'</i>'
+			+'</div>';
+         
+		$(y).insertBefore('div.concept:last');
+		e.preventDefault();
+		var self = $('.concept--input-container');
+		var concept = self.closest('.concept');
+
+		concept.find('.active').removeClass('active');
+		//console.log(concept.find('.active').removeClass('active'));
+		
+		concept.find('.concept--new-concept-container').addClass('active');
+		concept.find('.concept--new').focus();
+		$('#tb1').val('');
+		
+  //$('.concept--input-container').hide();
+  //$('.concept--new-concept-container').live;
+  //return $('.concept--new-concept-container');
 
 
       }
     });
+	
+
 	  /**
    * Event handler for concept tabs
    */
   $('.concept--new-concept-container').click(function(e) {
     e.preventDefault();
+	$('#tb1').val('');
     var self = $(this);
     var concept = self.closest('.concept');
 
     concept.find('.active').removeClass('active');
     concept.find('.concept--input-container').addClass('active');
     concept.find('.concept--input').focus();
+	
   });
   
-  
-  /**
-   * Event handler for tab changes
-   */
-  $('.tab-panels--tab').click(function(e) {
-    e.preventDefault();
-    var self = $(this);
-    var inputGroup = self.closest('.tab-panels');
-    var idName = null;
-
-    inputGroup.find('.tab-panels--tab.active').removeClass('active');
-    inputGroup.find('.tab-panels--tab-pane.active').removeClass('active');
-    self.addClass('active');
-    idName = self.attr('href');
-    $(idName).addClass('active');
-    $('.input--API').removeClass('active');
-    $('.input--endpoint').removeClass('active');
-    $(idName + '-endpoint').addClass('active');
-    $('._demo--output').css('display', 'none');
+  $('body').on('click', '.concept--derived-typed-concept',function() {
+     //$(this).remove();
+	 url = 'http://localhost:5000/endJourney/' + $(this).text();
+	 $.get(url, function(data) {
+	    var myText = '<div class="tab-panels" role="tabpanel">'+'<h3 class="base--h3"><b>About Topic<b></h3>'+data ['results'] +'<br/>'+'<a href="'+data ['links']+'" style="color:#0645AD">'+data ['links']+'</a></div>';
+		console.log(myText);
+	    $('#leftBottom').html(myText);
+	 });
   });
-
-
-
+   
+ $('body').on('click', '.concept--close-icon' , function(){
+ $('#tb1').val('');
+    $(this).closest('.concept').remove();
 });
-function GetDynamicTextBox(value) {
-    return '<input type="button" value="Replace" class="replace" />&nbsp;'+'<input id ="textBox" name = "DynamicTextBox" type="text" value = "' + value + '" />&nbsp;' +
-            '<input type="button" value="X" class="remove" />' + '&nbsp;' 
-            
-}
 
-  var pendingSuggestion = function(query) {
-    return '<div class="tt--search-hint"><i>Searching for ' + query.query + '</i></div>';
-  }
-  
-  var conceptSuggestion = function(d) {
-    if (getType(d.id) === 'concept') {
-      return '<div><strong>' + d.label + '</strong> <i class=\'pull-right\'>' +
-        getType(d.id) + '</i><br><i class="concept-abstract">' + trunc(d.abstract) + '</i></div>';
-    } else {
-      return '<div><strong>' + d.label + '</strong> <i class=\'pull-right\'>' +
-        getType(d.id) + '</i></div>';
-    }
-  };
-  
-  function sourceLabelSearch(query, callback) {
-    query_data = query;
-    return $.get('/api/labelSearch', {
-      query: query,
-      limit: 7,
-      concept_fields: JSON.stringify({
-        abstract: 1
-      })
-    }).done(function(results) {
-      $('#concepts-panel-API-data').empty();
-      $('#concepts-panel-API-data').html(JSON.stringify(results, null, 2));
-      $('#label-search-view-code-btn').removeAttr('disabled');
-      $('#label-search-view-code-btn').prev().removeClass('icon-code-disabled');
+ $('body').on('click', '.fa' , function(e){
+    //$(this).closest('.concept').remove();
+	var temp = '<div class="concept--input-container active">'+
+							 '<span class="twitter-typeahead" style="position: relative; display: inline-block;"><input class="concept--input tt-input" type="text" id="tb1" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: "Helvetica Neue", Helvetica, "Open Sans", Arial, "Lucida Grande", Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre></span></div>';
+	
+	 e.preventDefault();
+	
+    var self = $(this);
+    var concept = self.closest('.concept');
 
-      if(results.matches.length == 0){
-        $('.tt-dataset').html('<div class="tt--search-hint"><i>no concepts found</i></div>');
-      }
+    
+    concept.html(temp);
+    concept.find('.concept--input').focus(); 
+	
 
-      var filtered = {};
-      filtered['matches'] = results.matches.filter(function(elem) {
-        return elem.id.match(/^\/graphs/);
-      });
-      callback(filtered);
-    }).fail(function(error) {
-      // console.log('sourceLabelSearch.error:',error)
-    });
 	
 	
-	    $('.concept--input').citypeahead({
-      selectionCb: selectionCallback,
-      hint: false
-    }, {
-      templates: {
-        suggestion: conceptSuggestion,
-        pending: pendingSuggestion
-      },
-      source: sourceLabelSearch
-    });
-  }
+});
+
+ $('body').on('click', '.icono-plus' , function(){
+ console.log("here");
+ var content = $(this).closest('.concept--derived-concept').find('span').html();
+ console.log(content);
+  var temp ='<div class="concept"><div class="concept--typed-concept-container active"><i class="fa fa-refresh"></i>&nbsp;<span class="concept--typed-concept label">'+
+  content+'</span><i class="concept--close-icon icon icon-close"></i></div></div>';
+  
+  $('.concept--input-concept-list').find('div.concept:first').before(temp)
+  
+ });
+});
+
+ 
+
+
+
+
+
+ 
 
   
- function selectionCallback(concept) {
-    var label = concept.label;
-    var $template = $('.concept').last().clone();
-
-    $template.find('.label').text(label);
-    $template.find('.label').attr('concept_id', concept.id);
-    $template.find('.concept--close-icon').click(function() {
-      $(this).closest('.concept').remove();
-      fetch_ted_based_on_concepts();
-    });
-    $template.insertBefore('.concept:nth-last-child(1)');
-
-    $('.concept:nth-last-child(1) > .concept--input-container').empty();
-    $('.concept:nth-last-child(1) > .concept--input-container')
-      .html('<input class="concept--input" type="text" name="tb">');
-
-    $('.concept--input').citypeahead({
-      selectionCb: selectionCallback,
-      hint: false
-    }, {
-      templates: {
-        suggestion: conceptSuggestion,
-        pending: pendingSuggestion
-      },
-      source: sourceLabelSearch
-    });
-
   
-
-   // $('.concept:nth-last-child(1) > .concept--input-container').removeClass('active');
-   // $('.concept:nth-last-child(1) > .concept--new-concept-container').addClass('active');
-
-    fetch_ted_based_on_concepts();
-  }
+	
+	
   
-  //fetch results
   
-  function generate_TED_panel(TED_data, your_input_concepts) {
-  var TED_panel = '<div class="_TED-panel">' + '<div class="_TED-panel--TED">';
-
-  var TED_info_above = '<div class="TED--info-above">' + '<a class="TED--title" href="' + TED_data.user_fields.url + '" target="_blank">' + TED_data.user_fields.title + '</a>' + '<div class="TED--author">' + TED_data.user_fields.speaker + '</div>' + '<div class="TED--score">' + '<span class="TED--score-title">' + 'Confidence Score:' + '</span>' + '<span class="TED--score-value">' + Math.floor(TED_data.score * 100) + '</span>' + '</div>' + '</div>';
-
-  TED_panel += TED_info_above;
-
-  var TED_thumbnail = '<div class="TED--img">' + '<img src="' + TED_data.user_fields.thumbnail + '" alt="">' + '</div>';
-
-  TED_panel += TED_thumbnail;
-
-  var TED_info_below = '<div class="TED--info-below">' + '<a class="TED--title" href="' + TED_data.user_fields.url + '" target="_blank">' + TED_data.user_fields.title + '</a>' + '<div class="TED--author">' + TED_data.user_fields.speaker + '</div>' + '<div class="TED--score">' + '<span class="TED--score-title">' + 'Confidence Score:' + '</span>' + '<span class="TED--score-value">' + Math.floor(TED_data.score * 100) + '%' + '</span>' + '</div>' + '</div>';
-
-  TED_panel += TED_info_below;
-
-  TED_panel += '</div>';
-
-  TED_panel += '<div class="_TED-panel--how-it-works">' + '<div class="how-it-works--graph">' + '<div class="concept--your-input-list">';
-
-  var your_input_list = '';
-  var $TED_input_list = $('#TED1-panel > .base--textarea > ._TED-panel > ._TED-panel--how-it-works > .how-it-works--graph > .concept--your-input-list');
-  for (var i = 0; i < your_input_concepts.length; i++) {
-    var your_input_list_item = '<div class="concept--your-input-list-item">' + '<div class="concept--your-input">' + '<span class="concept--typed-concept">' + your_input_concepts[i] + '</span>' + '</div>' + '</div>';
-
-    your_input_list += your_input_list_item;
-  }
-  TED_panel += your_input_list;
-
-  TED_panel += '</div>' + '<div class="concept--derived-concept-list">';
-
-  var derived_concept_list = '';
-  var $TED_derived_concept_list = $('#TED1-panel > .base--textarea > ._TED-panel > ._TED-panel--how-it-works > .how-it-works--graph > .concept--derived-concept-list');
-  for (var i = 0; i < 3; i++) {
-    if (i == 0) {
-      var derived_concept_list_item = '<div class="concept--derived-concept-list-item">' + '<div class="concept--derived-concept active" data-index="' + i + '">' + '<span class="concept--typed-concept">' + TED_data.explanation_tags[i].concept.label + '</span>' + '</div>' + '</div>';
-
-    } else {
-      var derived_concept_list_item = '<div class="concept--derived-concept-list-item">' + '<div class="concept--derived-concept" data-index="' + i + '">' + '<span class="concept--typed-concept">' + TED_data.explanation_tags[i].concept.label + '</span>' + '</div>' + '</div>';
-
-    }
-
-    derived_concept_list += derived_concept_list_item;
-  }
-  TED_panel += derived_concept_list;
-
-  TED_panel += '</div>' + '</div>';
-
-  TED_panel += '<div class="how-it-works--passage-list">';
-
-  for (var i = 0; i < 3; i++) {
-    if (i == 0) {
-      TED_panel += '<blockquote class="base--blockquote how-it-works--passage active">' + '"' + TED_data.explanation_tags[i].passage + '"' + '</blockquote>';
-    } else {
-      TED_panel += '<blockquote class="base--blockquote how-it-works--passage">' + '"' + TED_data.explanation_tags[i].passage + '"' + '</blockquote>';
-    }
-  }
-
-  TED_panel += '</div>';
-
-  TED_panel += '</div>' + '</div>';
-
-  $('#TED-panel-list').append(TED_panel);
-
-
-  $('.concept--derived-concept').click(function(e) {
-    e.preventDefault();
-    var self = $(this);
-    var how_it_works = self.closest('._TED-panel--how-it-works');
-    var index = self.attr('data-index');
-
-    how_it_works.find('.concept--derived-concept.active').removeClass('active');
-    self.addClass('active');
-    how_it_works.find('.how-it-works--passage.active').removeClass('active');
-    how_it_works.find('.how-it-works--passage-list').children().eq(index).addClass('active');
-  });
-
-  $('.concept--derived-concept').hover(function(e) {
-    e.preventDefault();
-    var self = $(this);
-    var how_it_works = self.closest('._TED-panel--how-it-works');
-    var index = self.attr('data-index');
-
-    how_it_works.find('.concept--derived-concept.active').removeClass('active');
-    self.addClass('active');
-    how_it_works.find('.how-it-works--passage.active').removeClass('active');
-    how_it_works.find('.how-it-works--passage-list').children().eq(index).addClass('active');
-  });
-  
-  }
+ 

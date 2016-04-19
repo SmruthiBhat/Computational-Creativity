@@ -93,18 +93,24 @@ def delete(query):
     choice_inner_concept -= 1
     query.pop(choice_inner_concept)
     #return query
-
-def endJourney():
-    choice_inner_concept = input("Which topic do you want to know about? Choose from the above list:")
-    choice_inner_concept -= 1
-    concept_chosen = array_concepts[choice_inner_concept]
-    link_primitive = concept_insights.search_concept_by_label(concept_chosen, concept_fields={ "link": 1, "type": 1 })
+@app.route('/endJourney/<topic>')
+def endJourney(topic):
+    #choice_inner_concept = input("Which topic do you want to know about? Choose from the above list:")
+    #choice_inner_concept -= 1
+    #concept_chosen = array_concepts[choice_inner_concept]
+    concept_insights = authentication(username,password)
+    link_primitive = concept_insights.search_concept_by_label(topic, concept_fields={ "link": 1, "type": 1 })
     link = link_primitive.get("matches")[0].get("link")
     html = requests.get(link).text
     extracted = extraction.Extractor().extract(html.encode('UTF-8'), source_url=link)
     print extracted.description.encode('UTF-8')
-    print "To know more click on the link below"
-    print link
+    textIntro = extracted.description
+    #textIntro.headers['Access-Control-Allow-Origin'] = '*'
+    res = jsonify(results=textIntro,links=link)
+    res.headers['Access-Control-Allow-Origin'] = '*'
+    return res
+    #print "To know more click on the link below"
+    #print link
 
 def compare(list1,list2):
     print "list1 before",list1
@@ -158,6 +164,7 @@ def search(query):
         #append valid topic'''
     query = query[:-1]
     topic = query.split("+")
+    topic = [x for x in topic if x != ""]
     #topic.append(query)
     print "topic",topic
     tracker = 1

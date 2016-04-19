@@ -3,15 +3,19 @@
   <head>
     <link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/icono.min.css">
   </head>
   <style>
+  
   
 .headerDivider {
      border-left:1px solid #38546d; 
      border-right:1px solid #16222c; 
      height:100%;
-     position:absolute;
-     left:35%;
+     position:fixed;
+     left:40%;
      top:10px; 
 }
 svg {
@@ -31,18 +35,21 @@ visibility: hidden;
 }
   </style>
   <body>
+ 
     <div class="main">
-      <div class="container"style="float:left; width:25%">
+      <div class="container"style="float:left; width:35%">
  <br />       
         <!-- Case 1 -->
+		<div class="banner--service-icon-container">
+			<img class="banner--service-icon" src="images/images.jpg" alt="Concept Insight Service Demo Icon">
+		</div>
 		 <h2 class="base--h2">iSee therefore iThink</h2>
-		  <div id="concepts-panel" class="tab-panels--tab-pane active" role="tab-panel">
-		 
+		  		 
 		
 
 <br />
 <div class="tab-panels" role="tabpanel">
-				<h1><b>Enter a topic of your interest<b></h1>
+				<h3 class="base--h3"><b>Enter a topic of your interest<b></h3>
 				  <div class="tab-panels--tab-content">
 					<div id="concepts-panel" class="tab-panels--tab-pane active" role="tab-panel">
 					  <div class="concept--input-concept-list">
@@ -56,24 +63,12 @@ visibility: hidden;
 						  </div>
 						</div>
 					  </div>
-					  <span class="icon-hyperlink">
+					  
 					</div>
-					<div id="text-panel" class="tab-panels--tab-pane" role="tab-panel">
-					  <div class="concept--abstract-concept-container">
-						<div class="concept--abstract-concept-title">
-						  Top 3 Abstracted Concepts:
-						</div>
-						<div class="concept--abstract-concept-list">
-						</div>
-						<span class="icon-hyperlink">
-							<span class="icon icon-code icon-code-disabled"></span>
-							<button id="text-annotator-view-code-btn" class="base--a tab-panels--view-code" href="" onclick="show_text_annotator_response()" type="reset" disabled="">
-						  		View JSON
-							</button>
-						</span>
-					  </div>
-					</div>
+			
 				  </div>
+				  <br/>
+				  <input id="btnGet" type="button" value="Get Related Topics" />
 				</div>
 				<div id="concepts-panel-API" class="input--API input--json-container">
 			    <pre class="base--pre API--json language-javascript">
@@ -90,11 +85,13 @@ visibility: hidden;
 <div id="TextBoxContainer">
     <!--Textboxes will be added here -->
 </div>
-<br /> 
-<input id="btnGet" type="button" value="Get Related Topics" />
-	</div>
+
+	
 	
 		<div id = "leftResult"></div>
+		<div id = "leftBottom"></div>
+		
+		</div>
 	  </div>
 	  <div class = "headerDivider"></div>
 	  <div class="container"style="float:right; width:60%;right:100%">
@@ -189,5 +186,7 @@ visibility: hidden;
     <!--<script src="js/main.js"></script>  -->
 	<script type="text/javascript" src="js/citypeahead.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>	
+	  <script src="https://cdn.rawgit.com/vast-engineering/jquery-popup-overlay/1.7.13/jquery.popupoverlay.js"></script>
+	
   </body>
 </html>
