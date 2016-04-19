@@ -189,6 +189,7 @@ def search(query):
     for x in topic:
         topic_temp.append(x.lower())
     final_results =  compare(topic_temp,map)
+    topic = final_results
     print "map1",map
     array = []
     #for x in map:
