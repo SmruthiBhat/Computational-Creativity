@@ -7,6 +7,7 @@ import extraction
 import HTMLParser
 import cgi
 import copy
+import re
 
 from flask import Flask, jsonify
 #from BeautifulSoup import BeautifulSoup
@@ -165,6 +166,8 @@ def search(query):
     query = query[:-1]
     topic = query.split("+")
     topic = [x for x in topic if x != ""]
+    for count,x in enumerate(topic,0):
+        topic[count]=re.sub('[\xa0]', '', x);
     #topic.append(query)
     print "topic",topic
     tracker = 1

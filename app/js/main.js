@@ -1,9 +1,5 @@
 $(function () {
-    $("#btnAdd").bind("click", function () {
-        var div = $("<div />");
-        div.html(GetDynamicTextBox(""));
-        $("#TextBoxContainer").append(div);
-    });
+
     $("#btnGet").bind("click", function () {
         var values = "";
 		var val = "";
@@ -82,7 +78,7 @@ $(function () {
 		//var idText = "#" +id;
 		//var x = $('#tb1').val();
 		console.log(x);
-			var y = '<div class="concept">'+'<div class="concept--typed-concept-container active">'+'<i class="fa fa-refresh"></i>&nbsp'+'<span class="concept--typed-concept label" >'+x+'</span>'
+			var y = '<div class="concept">'+'<div class="concept--typed-concept-container active">'+'<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp&nbsp'+'<span class="concept--typed-concept label" >'+x+'</span>'
 					+'<i class="concept--close-icon icon icon-close">'+'</i>'
 			+'</div>';
          
