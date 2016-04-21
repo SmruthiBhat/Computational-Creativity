@@ -17,17 +17,22 @@ $(document).ready(function () {
             
             //var new_position = [-320,0,-250];
             var new_position = [0,0,0];
-            var new_position = [0,0,0];
-            var basic_camera_position = [0,0,250]
+            var old_position = [0,0,0];
+            var basic_camera_position = [0,0,250];
+            
             
             
       var Text2D = THREE_Text.Text2D;
       var SpriteText2D = THREE_Text.SpriteText2D;
       var textAlign = THREE_Text.textAlign;
+    
+    var sprite1 = new SpriteText2D("", { align: textAlign.center, font: '15px Arial', fillStyle: '#FFFFFF', antialias: true });
             
             
 var data = $("containerGraphs").data("json_data");
 //console.log($("container"));
+var searchTopics = $("#containerGraphs").data("search_topics");
+
 
 
 
@@ -42,7 +47,7 @@ var data = $("containerGraphs").data("json_data");
 
 var camWidth = canvas.clientWidth/4;
 var camHeight = canvas.clientHeight/4;
-var camFOV = 30;
+var camFOV = 20;
 var camNear = 1; 
 var camFar = 1200;
 var camOrthonear = 1; 
@@ -53,12 +58,12 @@ var camOrthofar = 1000;
                 camera = new THREE.CombinedCamera(camWidth,camHeight,camFOV, camNear, camFar,camOrthonear,camOrthofar);
                 camera.toOrthographic();
                 console.log(camera);
-				camera.cameraP = new THREE.PerspectiveCamera( 30, canvas.clientWidth / canvas.clientHeight, 1, 1200 );
+				camera.cameraP = new THREE.PerspectiveCamera( camFOV, canvas.clientWidth / canvas.clientHeight, 1, 1200 );
                 camera.cameraO = new THREE.OrthographicCamera(canvas.clientWidth / - 2, canvas.clientWidth / 2, canvas.clientHeight / 2, canvas.clientHeight / - 2, 1,1000);
                 //camera.position.z = 250;
                 camera.toPerspective();
-				camera.position.z = 480;
-                camera.position.y = 200;
+				camera.position.z = 520;
+                camera.position.y = 340;
                 //camera.position.x = -600;
 
                 
@@ -77,14 +82,15 @@ var camOrthofar = 1000;
 				//comment so boundingbox does not show
                 scene.add(all_nodes);
                 
-                addCube();
+                //addCube();
                 
                 console.log(controls);
 
 				//
                 
 
-renderer = new THREE.WebGLRenderer({canvas: canvas});
+renderer = new THREE.WebGLRenderer({canvas: canvas,antialias: true,alpha: true});
+renderer.setClearColor(0xF4F4F4, 1);
 canvas.width  = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
@@ -101,7 +107,7 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 				mouse = new THREE.Vector2();
                 
                 var guiParams = {
-                    in2D: true,
+                    in2D: false,
                     transparent: 0,
                     distance: 100,
                     fov: camera.fov,
@@ -126,9 +132,10 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 	    };
                 
                 var gui = new dat.GUI({
-                    width : 300
+                    width : 200,
+                    height : 60
                 });
-                
+                $(gui.domElement).attr("hidden", true);
                 camDistance = camera.position.z;
                 console.log(gui);
                 gui.add(myFunctions, 'RESET_EVENT').name('Reset Position');
@@ -158,10 +165,10 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 
 				//
 
-				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '40px';
-				container.appendChild( stats.domElement );
+				//stats = new Stats();
+				//stats.domElement.style.position = 'absolute';
+				//stats.domElement.style.top = '40px';
+				//container.appendChild( stats.domElement );
 
 				//
 
@@ -180,7 +187,7 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
                 document.addEventListener("keydown", onDocumentKeyDown, false);
 
                 
-			}
+			
 
           
                 $( "#leftResult" ).on("myCustomEvent",documentSelect);
@@ -193,7 +200,7 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
           
           
           
-          function addCube(){
+          function addCube(data,searchTopics){
               				//var geometry1 = new THREE.CubeGeometry( 45, 45, 45, 1, 1, 1 );
               //var geometry1 = new THREE.OctahedronGeometry( 45, 0);
                 //var geometry1 = new THREE.SphereGeometry( 120, 3, 3, 2, 2, 2 );
@@ -217,7 +224,7 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 				var vertex;
 				var color = new THREE.Color();
                 
-        sprite1 = new SpriteText2D("", { align: textAlign.center, font: '15px Arial', fillStyle: '#FFFFFF', antialias: true })
+        //sprite1 = new SpriteText2D("", { align: textAlign.center, font: '15px Arial', fillStyle: '#FFFFFF', antialias: true })
         sprite1.position.set(-300, -200, 100)
         //sprite1.position.set(300, 200, -100)
         sprite1.scale.set(.2, .2, .2)
@@ -228,22 +235,23 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
               
         old_position = new_position;
         var vector_old_position = new THREE.Vector3(old_position[0],old_position[1],old_position[2]);
-        new_position = [new_position[0]+120,new_position[1],new_position[2]+55];
+        new_position = [new_position[0]+120,new_position[1],new_position[2]+60];
         var vector_new_position = new THREE.Vector3(new_position[0],new_position[1],new_position[2]);
         //console.log(vector_new_position);     
               
         
         basic_camera_position = [basic_camera_position[0]+120,basic_camera_position[1],basic_camera_position[2]+55]
         camera.position.x += 120;
-        camera.position.z += 55;
+        camera.position.z += 60;
         //camera.up = new THREE.Vector3(0,1,0);
         //camera.lookAt(vector_new_position);
         //controls.target = vector_new_position;
         if (old_position[0] == 0) {
-            controls.target = vector_new_position;
+            controls.target = vector_new_position;       
         }
         else {
-        controls.target = vector_old_position;  
+        //controls.target = vector_old_position;  
+        controls.target = vector_new_position;
         }
               
 
@@ -262,12 +270,15 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
               
             vector_new_position.toArray( positions, 0 );
             sizes[ 0 ] = PARTICLE_SIZE * 1;
-            colors[ 0 *3 ] = 0;
-            colors[ 0 *3 +1 ] = 0;
-            colors[ 0 *3 +2 ] = .8;
-            names[ 0 ] = data['results'][0]['concept']['label']; 
+            //colors[ 0 *3 ] = 0;
+            //colors[ 0 *3 +1 ] = 0;
+            //colors[ 0 *3 +2 ] = .8;
+            colors[ 0 *3 ] = .1;
+            colors[ 0 *3 +1 ] = .73;
+            colors[ 0 *3 +2 ] = .09;            
+            names[ 0 ] = searchTopics; 
               
-            var node1 = new THREE.SphereGeometry(PARTICLE_SIZE/10,32,32);
+            var node1 = new THREE.SphereGeometry(PARTICLE_SIZE/12,32,32);
             //var node1 = new THREE.Geometry();
               
             var material1 = new THREE.MeshNormalMaterial();
@@ -276,7 +287,8 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
               
               
             //node1.size = PARTICLE_SIZE * 1;
-            node1.color = [0,0,.8];
+            //node1.color = [0,0,.8];
+             node1.color = [.6,.73,.25]; 
             
 
             var node2 = new THREE.Mesh(node1,material1);
@@ -285,14 +297,14 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
             node2.position.x = new_position[0];
             node2.position.y = new_position[1];
             node2.position.z = new_position[2];
-            node2.name = data['results'][0]['concept']['label'];
+            node2.name = searchTopics;
             //console.log(node2);
             //node2.visible = false;
             all_nodes.add(node2);
             //scene.add(node2);
             console.log(all_nodes);
               
-                        var sprite = new SpriteText2D(data['results'][0]['concept']['label'], { align: textAlign.center, font: '26px Arial', fillStyle: '#FFFFFF', antialias: true });
+                        var sprite = new SpriteText2D(searchTopics, { align: textAlign.center, font: '26px Arial', fillStyle: '#000000', antialias: true });
                         sprite.position.set(new_position[0],new_position[1],new_position[2]+PARTICLE_SIZE/10);
                         //sprite1.position.set(300, 200, -100);
                         sprite.scale.set(.2, .2, .2);
@@ -305,7 +317,7 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 					//vertex = vertices[ i ]  + new_position[(i%3)];
                     //THREE.Vector3(new_position)
                     
-                    if (i <= data.concepts.length-1) {
+                    if (i <= data['results'].length) {
                     
                     var vertex = new THREE.Vector3();
                     vertex.addVectors(vertices[ i-1 ],vector_new_position);
@@ -319,7 +331,7 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
                     //names[ i ] = data['results'][i]['concept']['label'];
                     
                         
-                                    var node1 = new THREE.SphereGeometry(PARTICLE_SIZE/6*.4,32,32);
+                                    var node1 = new THREE.SphereGeometry(PARTICLE_SIZE/8*.4,32,32);
 
 
                     node1.color = [0,.8,0];
@@ -330,13 +342,13 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
                     node2.position.x = vertex.x;
                     node2.position.y = vertex.y;
                     node2.position.z = vertex.z;
-                    node2.name = data['results'][i]['concept']['label'];
+                    node2.name = data['results'][i-1]['concept']['label'];
                     //node2.visible = false;
                     //console.log(node2);
                     all_nodes.add(node2);
                         
                     
-                        var sprite = new SpriteText2D(data['results'][i]['concept']['label'], { align: textAlign.center, font: '20px Arial', fillStyle: '#FFFFFF', antialias: true });
+                        var sprite = new SpriteText2D(data['results'][i-1]['concept']['label'], { align: textAlign.center, font: '20px Arial', fillStyle: '#000000', antialias: true });
                         sprite.position.set(vertex.x,vertex.y, vertex.z+3);
                         //sprite1.position.set(300, 200, -100);
                         sprite.scale.set(.2, .2, .2);
@@ -362,8 +374,8 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
                 
 				for ( var i = 1, l = vertices.length + 1; i < l; i ++ ) {
 
-					if (i <= data.concepts.length-1) {
-					names.push(data['results'][i]['concept']['label']);
+					if (i <= data['results'].length) {
+					names.push(data['results'][i-1]['concept']['label']);
                     }
                     else {
                         names.push('topic');
@@ -403,51 +415,39 @@ renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 			function onDocumentKeyDown( event ) {
                 var char = event.which;
 
-                if (char == 80)
-                    {
-	                    camera.toPerspective();
-                        //camera.type = camera.cameraP.type;
-                    }
-                if (char == 79)
-                    {                
-                        camera.toOrthographic();
-                        //camera.type = camera.cameraO.type;
-                    }
-                if (char == 13)
-                    {                
-                         addCube();
-                    }
+                //if (char == 80)
+                //    {
+	           //         camera.toPerspective();
+                //        //camera.type = camera.cameraP.type;
+                //    }
+                //if (char == 79)
+                //    {                
+                //        camera.toOrthographic();
+                //        //camera.type = camera.cameraO.type;
+                //    }
+                //if (char == 13)
+                //    {                
+                //         addCube();
+                //    }
                    
 			}
           
          function documentSelect( event ) {
              //event.preventDefault();
 var data = $("#containerGraphs").data("json_data");
+var searchTopics = $("#containerGraphs").data("search_topics");
+if (searchTopics.substring(searchTopics.length -1, searchTopics.length) == "+") {
+    searchTopics = searchTopics.slice(0,-1);
+    }
+//console.log("searchTopics")
+//console.log(searchTopics)
              console.log(data);
-             addCube(data);
+             if (typeof data != 'undefined' && searchTopics != ""){
+             addCube(data,searchTopics);}
          }
 			
           
 
-			function onDocumentKeyDown( event ) {
-                var char = event.which;
-
-                if (char == 80)
-                    {
-	                    camera.toPerspective();
-                        //camera.type = camera.cameraP.type;
-                    }
-                if (char == 79)
-                    {                
-                        camera.toOrthographic();
-                        //camera.type = camera.cameraO.type;
-                    }
-                if (char == 13)
-                    {                
-                         addCube();
-                    }
-                   
-			}
           
 			//function onDocumentMouseMove( event ) {
 
@@ -461,9 +461,9 @@ var data = $("#containerGraphs").data("json_data");
 			function onDocumentMouseMove( event ) {
 
 				event.preventDefault();
-
-				mouse.x = ( event.clientX / canvas.clientWidth ) * 2 - 1;
-				mouse.y = - ( event.clientY / canvas.clientHeight ) * 2 + 1;
+                var rect = canvas.getBoundingClientRect();
+				mouse.x = ( (event.clientX-rect.left) / canvas.clientWidth ) * 2 - 1;
+				mouse.y = - ( (event.clientY-rect.top) / canvas.clientHeight ) * 2 + 1;
 
 				//
 
@@ -605,7 +605,7 @@ var data = $("#containerGraphs").data("json_data");
 				requestAnimationFrame( animate );
 
 				render();
-				stats.update();
+				//stats.update();
 
 			}
 
@@ -633,13 +633,13 @@ var data = $("#containerGraphs").data("json_data");
                         //console.log(attributes.size.array[ INTERSECTED ]);
 						//attributes.size.needsUpdate = true;
                         //console.log(intersects[ 0 ])
-                        //sprite1.position.x = intersects[ 0 ]['point'].x +1 - (intersects[ 0 ]['point'].x - camera.position.x)/40;
-                        //sprite1.position.y = intersects[ 0 ]['point'].y +1 - (intersects[ 0 ]['point'].y - camera.position.y)/40;
-                        //sprite1.position.z = intersects[ 0 ]['point'].z - (intersects[ 0 ]['point'].z - camera.position.z)/40;
+                        sprite1.position.x = intersects[ 0 ]['point'].x +20 - (intersects[ 0 ]['point'].x - camera.position.x)/40;
+                        sprite1.position.y = intersects[ 0 ]['point'].y +80 - (intersects[ 0 ]['point'].y - camera.position.y)/40;
+                        sprite1.position.z = intersects[ 0 ]['point'].z - (intersects[ 0 ]['point'].z - camera.position.z)/40;
                         
-                        sprite1.position.x = controls.target.x + 150;
-                        sprite1.position.y = controls.target.y + 80;
-                        sprite1.position.z = controls.target.z+30;
+                        //sprite1.position.x = controls.target.x + 150;
+                        //sprite1.position.y = controls.target.y + 80;
+                        //sprite1.position.z = controls.target.z+30;
                         
                         sprite1.font = '60px Arial';
                         sprite1.fillStyle = '#0000FF';

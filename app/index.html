@@ -9,7 +9,9 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
   </head>
   <style>
-  
+      html {
+          overflow-x: scroll;
+      }
   
 .headerDivider {
      border-left:1px solid #38546d; 
@@ -19,33 +21,21 @@
      left:40%;
      top:10px; 
 }
+#containerGraphs {
+    margin-top: 0rem;
+      }
+#canvas {
+        height: 100%;
+        width: 70%;
+        background-color:#f4f4f4;
+        position:fixed;
+        }
 
-            #canvas {
-                height: 100%;
-                width: 100%;
-                background-color:  #F4F4F4;
-				position:fixed;
-            }
-svg {
-    text-align: center;
-    }
-#L1 {
-visibility: hidden;
-}
-#L1b {
-visibility: hidden;
-}
-#L2 {
-visibility: hidden;
-}
-#L2b {
-visibility: hidden;
-}
   </style>
   <body>
  
    
-      <div class="container"style="float:left; width:35%">
+      <div class="container"style="float:left; width:30%">
  <br />       
         <!-- Case 1 -->
 		<div class="banner--service-icon-container">
@@ -101,7 +91,7 @@ visibility: hidden;
 		
 		</div>
 	  
-	  <div class="container"style="float:right; width:60%;right:100%">
+	  <div class="container"style="float:right; width:69%;right:100%">
         <!-- Output -->
         <div id="results"></div>
 		

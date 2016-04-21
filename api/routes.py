@@ -126,7 +126,7 @@ def compare(list1,list2):
             list_temp.remove(i)
 
     print "list_temp after",list_temp
-    for i in range(3):
+    for i in range(4):
         ln.append(list_temp[i])
     print "ln",ln
     return ln

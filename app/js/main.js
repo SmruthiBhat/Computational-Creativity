@@ -1,5 +1,7 @@
 $(function () {
-
+	  function myTrim(x) {
+    return x.replace(/[+]+/g, '+');
+}
     $("#btnGet").bind("click", function () {
         var values = "";
 		var val = "";
@@ -10,7 +12,8 @@ $(function () {
 	console.log( $( this ).text() );
 	val += $( this ).text()+"+";
 	}
-	url = 'http://localhost:5000/search/' + val
+    $("#containerGraphs").data("search_topics",myTrim(val));
+	url = 'http://localhost:5000/search/' + val;
 });
       
 
@@ -24,9 +27,7 @@ $(function () {
     $.get(url, function(data) {
       // once the response returns, get the two keys
       //var query = data['results']['query'];
-	  function myTrim(x) {
-    return x.replace(/[+]+/g, '+');
-}
+
       var hello = data['results']['hello'];
 	  var res = "";
 	  var pre = '<div class="tab-panels" role="tabpanel">'
@@ -36,6 +37,7 @@ $(function () {
 	+'<div class="concept--your-input">'
 	+'<span class="concept--typed-concept">'+myTrim(query)+'</span></div></div></div>'+'<div class="concept--derived-concept-list">';
 	  console.log(data['results'].length);
+      $("#containerGraphs").data("json_data",data);
 	  for (i = 0; i < data['results'].length; i++) {
 		pre += '<div class="concept--derived-concept-list-item">'+'<div class="concept--derived-concept active" data-index="'+i+'">'
 				+'<span class="concept--derived-typed-concept">'+data ['results'][i]['concept']['label']
@@ -54,6 +56,7 @@ $(function () {
 	  //$("#results").html(p);
 	  pre += '</div></div></div>';
 	  $('#leftResult').html(pre);
+      $("#leftResult").trigger("myCustomEvent");
 		
 		});
     });
@@ -156,7 +159,7 @@ $(function () {
  console.log("here");
  var content = $(this).closest('.concept--derived-concept').find('span').html();
  console.log(content);
-  var temp ='<div class="concept"><div class="concept--typed-concept-container active"><i class="fa fa-refresh"></i>&nbsp;<span class="concept--typed-concept label">'+
+  var temp ='<div class="concept"><div class="concept--typed-concept-container active"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp&nbsp;<span class="concept--typed-concept label">'+
   content+'</span><i class="concept--close-icon icon icon-close"></i></div></div>';
   
   $('.concept--input-concept-list').find('div.concept:first').before(temp)
