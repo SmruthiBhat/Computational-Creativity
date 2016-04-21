@@ -411,7 +411,6 @@ html {
   box-sizing: inherit; }
 
 embed,
-img,
 object,
 video {
   max-width: 100%;
@@ -1000,10 +999,10 @@ pre[class*=" language-"] {
 .banner--service-icon {
   vertical-align: middle;
   margin-top: 0.5rem; }
-  @media (min-width: 500px) {
+  @media (min-width: 1000px) {
     .banner--service-icon {
       width: 6.25em; } }
-  @media (min-width: 700px) {
+  @media (min-width: 1400px) {
     .banner--service-icon {
       width: 8.125em; } }
 
@@ -1012,7 +1011,7 @@ pre[class*=" language-"] {
   display: none;
   height: 1.25em;
   margin-top: -0.275em; }
-  @media (min-width: 500px) {
+  @media (min-width: 1000px) {
     .banner--service-icon_INLINE {
       display: none; } }
 
@@ -1022,11 +1021,11 @@ pre[class*=" language-"] {
   clear: right;
   float: right;
   margin-right: 0; }
-  @media (min-width: 500px) {
+  @media (min-width: 600px) {
     .banner--service-icon-container {
       display: block;
       margin-top: 1rem; } }
-  @media (min-width: 700px) {
+  @media (min-width: 900px) {
     .banner--service-icon-container {
       width: 16.66667%;
       clear: right;
