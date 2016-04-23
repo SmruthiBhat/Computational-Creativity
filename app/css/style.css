@@ -1235,7 +1235,7 @@ pre[class*=" language-"] {
     .concept--derived-concept.active {
       border-left: 0.25em solid #AF4CA5; }
     .concept--derived-concept:before {
-      height: 4.5em;
+      height: 5em;
       width: 4em;
       content: '';
       position: absolute;

@@ -2,6 +2,12 @@ $(function () {
 	  function myTrim(x) {
     return x.replace(/[+]+/g, '+');
 }
+      function isPlus(a) {
+	var inta=a.charAt('0');
+	if(inta == '+')
+		return true;
+	return false;
+}
     $("#btnGet").bind("click", function () {
         var values = "";
 		var val = "";
@@ -12,10 +18,18 @@ $(function () {
 	console.log( $( this ).text() );
 	val += $( this ).text()+"+";
 	}
-    $("#containerGraphs").data("search_topics",myTrim(val));
+	var temp = val;
+	temp = myTrim(val);
+	if(isPlus(temp)){
+	temp =temp.slice(3);
+	}
+    $("#containerGraphs").data("search_topics",myTrim(temp));
 	url = 'http://localhost:5000/search/' + val;
 });
-      
+ 
+ 
+
+
 
         //alert(values);
 		  // 1. get the search query
@@ -27,7 +41,11 @@ $(function () {
     $.get(url, function(data) {
       // once the response returns, get the two keys
       //var query = data['results']['query'];
-
+	query =myTrim(query);
+	if(isPlus(query))
+{
+	query = query.slice(3);
+}
       var hello = data['results']['hello'];
 	  var res = "";
 	  var pre = '<div class="tab-panels" role="tabpanel">'
@@ -158,7 +176,8 @@ $(function () {
  $('body').on('click', '.icono-plus' , function(){
  console.log("here");
  var content = $(this).closest('.concept--derived-concept').find('span').html();
- console.log(content);
+ console.log("content"+content);
+
   var temp ='<div class="concept"><div class="concept--typed-concept-container active"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp&nbsp;<span class="concept--typed-concept label">'+
   content+'</span><i class="concept--close-icon icon icon-close"></i></div></div>';
   
